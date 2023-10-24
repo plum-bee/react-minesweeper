@@ -1,7 +1,7 @@
 module.exports = {
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(t|j|m?j)sx?$': '@swc/jest'
+    '^.+\\.(t|m?j)sx?$': '@swc/jest'
   },
   transformIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.yarn/'],
   moduleFileExtensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
