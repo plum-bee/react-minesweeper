@@ -1,6 +1,6 @@
 import React from 'react'
 
-const HelloWorld: React.FC = () => {
+function HelloWorld (): React.ReactElement {
   return <h1 data-testid='helloWorld'>Hello World!</h1>
 }
 
