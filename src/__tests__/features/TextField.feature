@@ -7,12 +7,13 @@ Feature: TextField
     Background:
         Given I have TextField component on the page
 
+    @single
     Scenario: Setting the TextField to disabled mode
-        When I set the "disabled" prop to "true"
+        When I set the "isDisabled" prop to "true"
         Then The TextField should be disabled
 
     Scenario: Setting the TextField to read-only mode
-        When I set the "readonly" prop to "true"
+        When I set the "isReadOnly" prop to "true"
         Then The TextField should be read-only
 
     Scenario Outline: Setting the TextField minimum length
@@ -42,7 +43,7 @@ Feature: TextField
             | abcdef | false |
 
     Scenario Outline: Setting the TextField to required
-        When I set the "required" prop to "true"
+        When I set the "isRequired" prop to "true"
         And I type "<input>" into the TextField
         Then The TextField should be "<valid>"
         Examples:
