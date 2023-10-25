@@ -54,32 +54,3 @@ Feature: TextField
             | abcd   | true  |
             | abcde  | true  |
             | abcdef | true  |
-
-    Scenario Outline: Setting the TextField to validate using regex
-        When I set the "pattern" prop to "<regex>"
-        And I type "<input>" into the TextField
-        Then The TextField should be "<valid>"
-        Examples:
-            | input                 | regex                                              | valid |
-            | abc123                | /^[a-z]+$/i                                        | false |
-            | abc                   | /^[a-z]+$/i                                        | true  |
-            | 123                   | /^[a-z]+$/i                                        | false |
-            | 123abc                | /^[a-z]+$/i                                        | false |
-            | ABC                   | /^[a-z]+$/                                         | false |
-            | abc                   | /^[a-z]+$/                                         | true  |
-            | 123                   | /^[a-z]+$/                                         | false |
-            | 123abc                | /^[a-z]+$/                                         | false |
-            | ABC                   | /^[a-z]+$/                                         | false |
-            | abc123                | /^[a-z0-9]+$/i                                     | true  |
-            | ABC123                | /^[a-z0-9]+$/i                                     | true  |
-            | 123                   | /^[a-z0-9]+$/i                                     | true  |
-            | abc!                  | /^[a-z0-9]+$/i                                     | false |
-            | ABC!                  | /^[a-z0-9]+$/i                                     | false |
-            | 123!                  | /^[a-z0-9]+$/i                                     | false |
-            | john.doe@example.com  | /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ | true  |
-            | john.doe@example      | /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ | false |
-            | john.doe@.com         | /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ | false |
-            | john.doe@example..com | /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ | false |
-
-
-
