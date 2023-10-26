@@ -1,63 +1,43 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 interface TextFieldProps {
-  isDisabled?: boolean
-  isReadOnly?: boolean
-  testId?: string
-  minLength?: number
-  maxLength?: number
-  isRequired?: boolean
-  customValidator?: (value: string) => boolean
-  label?: string
+  id: string
+  name: string
+  label: string
+  placeholder: string
+  value: string
+  error: string
+  validated: boolean
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const TextField: React.FC<TextFieldProps> = ({
-  label = 'label',
-  isDisabled = false,
-  isReadOnly = false,
-  testId = 'textField',
-  minLength = 0,
-  maxLength = 20,
-  isRequired = false,
-  customValidator
+  id,
+  name,
+  label,
+  placeholder,
+  value,
+  error,
+  validated,
+  handleInputChange
 }) => {
-  const [inputValue, setInputValue] = useState('')
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setInputValue(event.target.value)
-  }
-
-  const isFieldValid = (): boolean => {
-    if (isRequired && inputValue.length === 0) {
-      return false
-    }
-    if (minLength !== undefined && inputValue.length < minLength) {
-      return false
-    }
-    if (maxLength !== undefined && inputValue.length > maxLength) {
-      return false
-    }
-    if (customValidator !== undefined && !customValidator(inputValue)) {
-      return false
-    }
-    return true
-  }
+  const inputClassName = validated ? 'validated' : ''
 
   return (
     <div>
-      {label !== '' && <label htmlFor={testId}>{label}</label>}
-      <input
-        type='text'
-        value={inputValue}
-        onChange={handleChange}
-        disabled={isDisabled}
-        readOnly={isReadOnly}
-        data-testid={testId}
-        className={isFieldValid() ? 'valid' : 'invalid'}
-        required={isRequired}
-        minLength={minLength}
-        maxLength={maxLength}
-      />
+      <label htmlFor={id}>
+        {label}
+        <input
+          id={id}
+          name={name}
+          type='text'
+          placeholder={placeholder}
+          value={value}
+          onChange={handleInputChange}
+          className={inputClassName}
+        />
+        {error !== '' && <p>{error}</p>}
+      </label>
     </div>
   )
 }
