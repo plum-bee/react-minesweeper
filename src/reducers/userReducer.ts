@@ -1,46 +1,54 @@
 import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
-const initialState = {
+interface UserState {
+  name: string
+  surname: string
+  country: string
+  username: string
+  email: string
+  password: string
+  score?: number
+}
+
+const initialState: UserState = {
   name: '',
   surname: '',
   country: '',
   username: '',
+  email: '',
   password: '',
-  email: ''
+  score: 0
 }
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setName: (state, action) => {
-      state.name = action.payload
+    updateUserData: (
+      state: UserState,
+      action: PayloadAction<{
+        field: string
+        value: string
+      }>
+    ) => {
+      const { field, value } = action.payload
+      return { ...state, [field]: value }
     },
-    setSurname: (state, action) => {
-      state.surname = action.payload
-    },
-    setCountry: (state, action) => {
-      state.country = action.payload
-    },
-    setUsername: (state, action) => {
-      state.username = action.payload
-    },
-    setPassword: (state, action) => {
-      state.password = action.payload
-    },
-    setEmail: (state, action) => {
-      state.email = action.payload
+    resetRegisterForm: (state: UserState) => {
+      return {
+        ...state,
+        name: '',
+        surname: '',
+        country: '',
+        username: '',
+        email: '',
+        password: ''
+      }
     }
   }
 })
 
-export const {
-  setName,
-  setSurname,
-  setCountry,
-  setUsername,
-  setPassword,
-  setEmail
-} = userSlice.actions
+export const { updateUserData, resetRegisterForm } = userSlice.actions
 
 export default userSlice.reducer
