@@ -31,21 +31,10 @@ const userSlice = createSlice({
     ) => {
       const { field, value } = action.payload
       return { ...state, [field]: value }
-    },
-    resetRegisterForm: (state: UserState) => {
-      return {
-        ...state,
-        name: '',
-        surname: '',
-        country: '',
-        username: '',
-        email: '',
-        password: ''
-      }
     }
   }
 })
 
-export const { updateUserData, resetRegisterForm } = userSlice.actions
+export const { updateUserData } = userSlice.actions
 
 export default userSlice.reducer
