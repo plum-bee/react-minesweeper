@@ -7,14 +7,15 @@ function useForm (
 ): FormHooks {
   const [formFieldData, setFormFieldData] =
     useState<FormFieldData>(initialValues)
-  const [formFieldErrors, setFieldErrors] = useState<FormFieldErrors>({})
+
+  const [formFieldErrors, setFormFieldErrors] = useState<FormFieldErrors>({})
 
   const updateFormData = (event: InputChangeEvent): void => {
     const { name, value } = event.target
     const updatedData = { ...formFieldData, [name]: value.trim() }
 
     setFormFieldData(updatedData)
-    setFieldErrors(validate(updatedData) as FormFieldErrors)
+    setFormFieldErrors(validate(updatedData))
   }
 
   return { formFieldData, formFieldErrors, updateFormData }
@@ -23,7 +24,7 @@ function useForm (
 export type FormFieldData = Record<string, string>
 export type FormFieldErrors = Record<string, string>
 export type InputChangeEvent = ChangeEvent<HTMLInputElement>
-export type FieldValidator = (values: FormFieldData) => FormFieldData
+export type FieldValidator = (values: FormFieldData) => FormFieldErrors
 
 export interface FormHooks {
   formFieldData: FormFieldData

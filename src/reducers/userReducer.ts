@@ -27,7 +27,7 @@ const userSlice = createSlice({
   reducers: {
     updateUserData: (
       state: UserState,
-      action: PayloadAction<{ field: string; value: string | number }>
+      action: PayloadAction<{ field: string, value: string | number }>
     ) => {
       const { field, value } = action.payload
       return { ...state, [field]: value }

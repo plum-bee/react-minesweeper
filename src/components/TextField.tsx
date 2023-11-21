@@ -9,6 +9,7 @@ interface TextFieldProps {
   error: string
   validated: boolean
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  testid: string
 }
 
 const TextField: React.FC<TextFieldProps> = ({
@@ -19,7 +20,8 @@ const TextField: React.FC<TextFieldProps> = ({
   value,
   error,
   validated,
-  handleInputChange
+  handleInputChange,
+  testid
 }) => {
   const inputClassName = validated ? 'validated' : ''
 
@@ -35,8 +37,9 @@ const TextField: React.FC<TextFieldProps> = ({
           value={value}
           onChange={handleInputChange}
           className={inputClassName}
+          data-testid={testid}
         />
-        {error !== '' && <p>{error}</p>}
+        {error !== '' && <p data-testid={`${testid}-error`}>{error}</p>}
       </label>
     </div>
   )

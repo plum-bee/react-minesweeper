@@ -1,4 +1,4 @@
 import __template__ from './__template__.jsx'
-import textFieldSteps from './TextField.steps.jsx'
+import loginSteps from './login.steps.tsx'
 
-export default [__template__, textFieldSteps]
+export default [__template__, loginSteps]
