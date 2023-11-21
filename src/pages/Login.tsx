@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import useForm from '../hooks/useForm'
 import TextField from '../components/TextField'
 import type { FormFieldData, FormFieldErrors } from '../hooks/useForm'
-// import axiosInstance from '../api/axiosConfig'
+import axiosInstance from '../api/axiosConfig'
 
 function LoginForm (): JSX.Element {
   const navigate = useNavigate()
@@ -27,27 +27,28 @@ function LoginForm (): JSX.Element {
     validate
   )
 
-  const handleSubmit = (event: React.FormEvent): void => {
+  const handleSubmit = async (event: React.FormEvent): Promise<void> => {
     event.preventDefault()
 
-    navigate('/register')
-    // const asyncSubmit = async (): Promise<void> => {
-    //   try {
-    //     const response = await axiosInstance.post('/users/username', {
-    //       username: formFieldData.username
-    //     })
+    const enteredUsername = formFieldData.username
+    const enteredPassword = formFieldData.password
 
-    //     if (response.data.password === formFieldData.password) {
-    //       navigate('/register')
-    //     } else {
-    //       console.log('Invalid login')
-    //     }
-    //   } catch (error) {
-    //     console.error('Error occurred during login:', error)
-    //   }
-    // }
+    try {
+      const response = await axiosInstance.get(
+        `/users/username/${enteredUsername}`
+      )
+      const userData = response.data
 
-    // void asyncSubmit()
+      console.log(userData)
+
+      if (userData.password === enteredPassword) {
+        navigate('/leaderboard')
+      } else {
+        alert('Invalid username or password')
+      }
+    } catch (error) {
+      alert('Login failed')
+    }
   }
 
   return (

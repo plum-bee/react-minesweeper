@@ -66,8 +66,9 @@ export const loginSteps = ({
   )
 
   Then(/^I should remain on the "(.*)" page$/, function (pageName: string) {
-    console.log(pageName)
-    return true
+    const expectedPath = `/${pageName}`
+    const currentPath = window.location.pathname
+    expect(currentPath).toBe(expectedPath)
   })
 
   When(
