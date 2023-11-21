@@ -7,7 +7,7 @@ Feature: Login Screen
         Given I have a user account with username "testuser" and password "testpassword"
         When I enter username "testuser" and password "testpassword"
         And I click the "login" button
-        Then I should be redirected to the "home" page
+        Then I should be redirected to the "register" page
 
     # Scenario: Login with invalid credentials
     #     Given I have a user account with username "testuser" and password "testpassword"

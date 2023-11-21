@@ -59,8 +59,9 @@ export const loginSteps = ({
   Then(
     /^I should be redirected to the "(.*)" page$/,
     function (pageName: string) {
-      console.log(pageName)
-      return true
+      const expectedPath = `/${pageName}`
+      const currentPath = window.location.pathname
+      expect(currentPath).toBe(expectedPath)
     }
   )
 

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import useForm from '../hooks/useForm'
 import TextField from '../components/TextField'
 import type { FormFieldData, FormFieldErrors } from '../hooks/useForm'
+// import axiosInstance from '../api/axiosConfig'
 
 function LoginForm (): JSX.Element {
   const navigate = useNavigate()
@@ -28,7 +29,25 @@ function LoginForm (): JSX.Element {
 
   const handleSubmit = (event: React.FormEvent): void => {
     event.preventDefault()
+
     navigate('/register')
+    // const asyncSubmit = async (): Promise<void> => {
+    //   try {
+    //     const response = await axiosInstance.post('/users/username', {
+    //       username: formFieldData.username
+    //     })
+
+    //     if (response.data.password === formFieldData.password) {
+    //       navigate('/register')
+    //     } else {
+    //       console.log('Invalid login')
+    //     }
+    //   } catch (error) {
+    //     console.error('Error occurred during login:', error)
+    //   }
+    // }
+
+    // void asyncSubmit()
   }
 
   return (
