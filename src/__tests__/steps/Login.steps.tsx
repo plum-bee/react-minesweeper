@@ -1,4 +1,5 @@
 import React from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
 import '@testing-library/jest-dom'
 import { expect } from '@jest/globals'
 import axios from 'axios'
@@ -23,7 +24,11 @@ export const loginSteps = ({
   then: any
 }): void => {
   Given(/^I am on the login page$/, function () {
-    render(<LoginForm />)
+    render(
+      <Router>
+        <LoginForm />
+      </Router>
+    )
   })
 
   Given(
@@ -35,7 +40,7 @@ export const loginSteps = ({
       }
 
       const response = await axios.post('http://localhost:3000/users', user)
-      expect(response.status).toBe(200)
+      expect(response.status).toBe(201) // Created
     }
   )
 
@@ -64,11 +69,13 @@ export const loginSteps = ({
     return true
   })
 
-  When(/^I should see the error message "(.*)"$/, function (errorMessage: string) {
-    const error = screen.getByTestId('username-error').innerHTML
-
-    expect(error).toBe(errorMessage)
-  })
+  When(
+    /^I should see the error message "(.*)"$/,
+    function (errorMessage: string) {
+      const error = screen.getByTestId('username-error').innerHTML
+      expect(error).toBe(errorMessage)
+    }
+  )
 }
 
 export default loginSteps

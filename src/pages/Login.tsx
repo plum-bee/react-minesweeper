@@ -1,10 +1,11 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import useForm from '../hooks/useForm'
 import TextField from '../components/TextField'
 import type { FormFieldData, FormFieldErrors } from '../hooks/useForm'
-import axios from 'axios'
 
 function LoginForm (): JSX.Element {
+  const navigate = useNavigate()
   const initialValues = {
     username: '',
     password: ''
@@ -27,6 +28,7 @@ function LoginForm (): JSX.Element {
 
   const handleSubmit = (event: React.FormEvent): void => {
     event.preventDefault()
+    navigate('/register')
   }
 
   return (
@@ -51,9 +53,11 @@ function LoginForm (): JSX.Element {
         error={formFieldErrors.password}
         validated={true}
         handleInputChange={updateFormData}
-        testid= 'password'
+        testid='password'
       />
-      <button type='submit' data-testid='login'>Login</button>
+      <button type='submit' data-testid='login'>
+        Login
+      </button>
     </form>
   )
 }
