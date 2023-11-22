@@ -1,10 +1,40 @@
 import React from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
 import '@testing-library/jest-dom'
-import { expect } from '@jest/globals'
-import axios from 'axios'
-import { fireEvent, screen, render } from '@testing-library/react'
+import { expect, afterEach } from '@jest/globals'
+import axiosInstance from '../../api/axiosConfig'
+import { fireEvent, screen, render, waitFor } from '@testing-library/react'
 import LoginForm from '../../pages/Login.tsx'
+import { createMemoryHistory } from 'history'
+import { Router } from 'react-router-dom'
+
+interface User {
+  name: string
+  surname: string
+  username: string
+  password: string
+  email: string
+}
+
+let testUser: User = {
+  name: 'John',
+  surname: 'Doe',
+  username: 'johndoe',
+  password: 'password123',
+  email: 'john.doe@email.com'
+}
+
+// beforeEach(async () => {
+//   await axiosInstance.delete(`/users/username/${testUser.username}`)
+// })
+
+const updateTestUser = (newUser: Partial<User>): User => {
+  testUser = { ...testUser, ...newUser }
+  return testUser
+}
+
+afterEach(async () => {
+  await axiosInstance.delete(`/users/username/${testUser.username}`)
+})
 
 const fillInLoginForm = (username: string, password: string): void => {
   const usernameInput = screen.getByTestId('username')
@@ -24,8 +54,11 @@ export const loginSteps = ({
   then: any
 }): void => {
   Given(/^I am on the login page$/, function () {
+    const history = createMemoryHistory()
+    history.push('/login')
+
     render(
-      <Router>
+      <Router history={history}>
         <LoginForm />
       </Router>
     )
@@ -34,13 +67,8 @@ export const loginSteps = ({
   Given(
     /^I have a user account with username "(.*)" and password "(.*)"$/,
     async function (username: string, password: string) {
-      const user = {
-        username,
-        password
-      }
-
-      const response = await axios.post('http://localhost:3000/users', user)
-      expect(response.status).toBe(201) // Created
+      updateTestUser({ ...testUser, username, password })
+      await axiosInstance.post('/users', testUser)
     }
   )
 
@@ -58,18 +86,28 @@ export const loginSteps = ({
 
   Then(
     /^I should be redirected to the "(.*)" page$/,
-    function (pageName: string) {
-      const expectedPath = `/${pageName}`
-      const currentPath = window.location.pathname
-      expect(currentPath).toBe(expectedPath)
+    async function (pageName: string) {
+      await waitFor(() => {
+        const expectedPath = `/${pageName}`
+        const currentPath = window.location.pathname
+        expect(currentPath).toBe(expectedPath)
+      })
     }
   )
 
-  Then(/^I should remain on the "(.*)" page$/, function (pageName: string) {
-    const expectedPath = `/${pageName}`
-    const currentPath = window.location.pathname
-    expect(currentPath).toBe(expectedPath)
-  })
+  Then(
+    /^I should remain on the "(.*)" page$/,
+    async function (pageName: string) {
+      await waitFor(
+        () => {
+          const expectedPath = `/${pageName}`
+          const currentPath = window.location.pathname
+          expect(currentPath).toBe(expectedPath)
+        },
+        { timeout: 4000 }
+      )
+    }
+  )
 
   When(
     /^I should see the error message "(.*)"$/,
