@@ -9,7 +9,8 @@ module.exports = {
   moduleFileExtensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
     uuid: require.resolve('uuid'),
-    '\\.(css|less|png|jpg|gif|jpeg|webp)$': 'identity-obj-proxy'
+    '\\.(css|less|png|jpg|gif|jpeg|webp)$':
+      '<rootDir>/test/__ mocks __/fileMock.js'
   },
   collectCoverage: true,
   coveragePathIgnorePatterns: ['src/__tests__/', 'node_modules/', '.yarn/']

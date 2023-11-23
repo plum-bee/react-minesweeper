@@ -41,16 +41,14 @@ function LoginForm (): JSX.Element {
 
       if (userData.password === enteredPassword) {
         navigate('/leaderboard')
-      } else {
-        alert('Invalid username or password')
       }
     } catch (error) {
-      alert('Login failed')
+      console.log('error')
     }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} data-testid='login-form'>
       <TextField
         id='username'
         name='username'

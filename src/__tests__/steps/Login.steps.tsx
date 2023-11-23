@@ -1,11 +1,11 @@
 import React from 'react'
-import '@testing-library/jest-dom'
 import { expect, afterEach } from '@jest/globals'
 import axiosInstance from '../../api/axiosConfig'
 import { fireEvent, screen, render, waitFor } from '@testing-library/react'
 import LoginForm from '../../pages/Login.tsx'
-import { createMemoryHistory } from 'history'
-import { Router } from 'react-router-dom'
+import '@testing-library/jest-dom'
+import { BrowserRouter } from 'react-router-dom'
+import userEvent from '@testing-library/user-event'
 
 interface User {
   name: string
@@ -36,6 +36,15 @@ afterEach(async () => {
   await axiosInstance.delete(`/users/username/${testUser.username}`)
 })
 
+const renderWithRouter = (ui: any, { route = '/' } = {}): any => {
+  window.history.pushState({}, 'Test page', route)
+
+  return {
+    user: userEvent.setup(),
+    ...render(ui, { wrapper: BrowserRouter })
+  }
+}
+
 const fillInLoginForm = (username: string, password: string): void => {
   const usernameInput = screen.getByTestId('username')
   const passwordInput = screen.getByTestId('password')
@@ -54,14 +63,7 @@ export const loginSteps = ({
   then: any
 }): void => {
   Given(/^I am on the login page$/, function () {
-    const history = createMemoryHistory()
-    history.push('/login')
-
-    render(
-      <Router history={history}>
-        <LoginForm />
-      </Router>
-    )
+    renderWithRouter(<LoginForm />, { route: '/login' })
   })
 
   Given(
@@ -86,7 +88,7 @@ export const loginSteps = ({
 
   Then(
     /^I should be redirected to the "(.*)" page$/,
-    async function (pageName: string) {
+    async function (this: { history: History }, pageName: string) {
       await waitFor(() => {
         const expectedPath = `/${pageName}`
         const currentPath = window.location.pathname
@@ -97,15 +99,12 @@ export const loginSteps = ({
 
   Then(
     /^I should remain on the "(.*)" page$/,
-    async function (pageName: string) {
-      await waitFor(
-        () => {
-          const expectedPath = `/${pageName}`
-          const currentPath = window.location.pathname
-          expect(currentPath).toBe(expectedPath)
-        },
-        { timeout: 4000 }
-      )
+    async function (this: { history: History }, pageName: string) {
+      await waitFor(() => {
+        const expectedPath = `/${pageName}`
+        const currentPath = window.location.pathname
+        expect(currentPath).toBe(expectedPath)
+      })
     }
   )
 
