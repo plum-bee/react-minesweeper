@@ -14,3 +14,4 @@ Feature: Login Screen
         When I enter username "johndoe" and password "wrongpassword123"
         And I click the "login" button
         Then I should remain on the "login" page
+        And I should see a message "Invalid username or password"

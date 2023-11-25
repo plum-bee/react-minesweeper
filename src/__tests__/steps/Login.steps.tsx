@@ -109,9 +109,9 @@ export const loginSteps = ({
   )
 
   When(
-    /^I should see the error message "(.*)"$/,
+    /^I should see following error message "(.*)"$/,
     function (errorMessage: string) {
-      const error = screen.getByTestId('username-error').innerHTML
+      const error = screen.getByTestId('login-error').innerHTML
       expect(error).toBe(errorMessage)
     }
   )

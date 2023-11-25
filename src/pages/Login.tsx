@@ -18,6 +18,9 @@ function LoginForm (): JSX.Element {
     if (values.username === '') {
       errors.username = 'Username is required'
     }
+    if (values.password === '') {
+      errors.password = 'Password is required'
+    }
 
     return errors
   }
@@ -27,24 +30,39 @@ function LoginForm (): JSX.Element {
     validate
   )
 
-  const handleSubmit = async (event: React.FormEvent): Promise<void> => {
+  const handleSubmit = (event: React.FormEvent): void => {
     event.preventDefault()
+
+    const formErrors = validate(formFieldData)
+    if (Object.keys(formErrors).length > 0) {
+      setFormFieldErrors(formErrors)
+      return
+    }
 
     const enteredUsername = formFieldData.username
     const enteredPassword = formFieldData.password
 
-    try {
-      const response = await axiosInstance.get(
-        `/users/username/${enteredUsername}`
-      )
-      const userData = response.data
+    axiosInstance
+      .get(`/users/username/${enteredUsername}`)
+      .then(response => {
+        const userData = response.data
 
-      if (userData.password === enteredPassword) {
-        navigate('/leaderboard')
-      }
-    } catch (error) {
-      console.log('error')
-    }
+        if (userData.password === enteredPassword) {
+          navigate('/leaderboard')
+        } else {
+          setFormFieldErrors({
+            ...formFieldErrors,
+            login: 'Invalid credentials'
+          })
+        }
+      })
+      .catch(error => {
+        console.error('Login error', error)
+      })
+  }
+
+  const handleRegister = (): void => {
+    navigate('/register')
   }
 
   return (
@@ -73,6 +91,9 @@ function LoginForm (): JSX.Element {
       />
       <button type='submit' data-testid='login'>
         Login
+      </button>
+      <button type='button' onClick={handleRegister}>
+        Register
       </button>
     </form>
   )
